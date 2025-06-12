@@ -1,0 +1,6 @@
+json_rpc_url: http://localhost:8999
+websocket_url: ws://localhost:9000
+keypair_path: id.json
+address_labels:
+  "11111111111111111111111111111111": System Program
+commitment: confirmed

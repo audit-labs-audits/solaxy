@@ -1,0 +1,3 @@
+# https://github.com/rust-lang/cargo/issues/2078#issuecomment-434388584
+[net]
+git-fetch-with-cli = true

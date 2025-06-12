@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+
+# code editors
+.idea/
+.vscode/*
+!.vscode/settings.default.json
+
+# cargo
+target/
+/target
+
+crates/benches/src/bench_files/generated/
+crates/benches/src/metrics/generated/
+crates/provers/sp1/guest-celestia/elf/
+crates/provers/sp1/guest-mock/elf/
+crates/rollup/demo_data/
+crates/rollup/data/
+crates/rollup/mock_da.sqlite
+crates/test-data/genesis/benchmark/accounts.json
+
+# docker
+/docker/credentials/*
+!/docker/credentials/bridge-0.addr
+!/docker/credentials/bridge-0.key
+!/docker/credentials/bridge-1.key
+!/docker/credentials/bridge-1.addr
+!/docker/credentials/bridge-2.key
+!/docker/credentials/bridge-2.addr
+crates/rollup/rollup_config.toml
+
+# mock runs
+**/demo_data/
+**/mock_da.sqlite*
+
+# benchmark output
+crates/benches/benches

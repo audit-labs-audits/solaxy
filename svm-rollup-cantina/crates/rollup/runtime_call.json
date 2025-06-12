@@ -1,0 +1,669 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "RuntimeCall_for_ConfigurableSpec",
+  "description": "This enum is generated from the underlying Runtime, the variants correspond to call messages from the relevant modules",
+  "oneOf": [
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "bank"
+      ],
+      "properties": {
+        "bank": {
+          "$ref": "#/definitions/CallMessage"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "sequencer_registry"
+      ],
+      "properties": {
+        "sequencer_registry": {
+          "$ref": "#/definitions/CallMessage2"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "attester_incentives"
+      ],
+      "properties": {
+        "attester_incentives": {
+          "$ref": "#/definitions/CallMessage3"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "prover_incentives"
+      ],
+      "properties": {
+        "prover_incentives": {
+          "$ref": "#/definitions/CallMessage4"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "accounts"
+      ],
+      "properties": {
+        "accounts": {
+          "$ref": "#/definitions/CallMessage5"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "chain_state"
+      ],
+      "properties": {
+        "chain_state": {
+          "$ref": "#/definitions/NotInstantiable"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "blob_storage"
+      ],
+      "properties": {
+        "blob_storage": {
+          "$ref": "#/definitions/NotInstantiable"
+        }
+      },
+      "additionalProperties": false
+    },
+    {
+      "description": "Module call message.",
+      "type": "object",
+      "required": [
+        "svm"
+      ],
+      "properties": {
+        "svm": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "format": "uint8",
+            "minimum": 0.0
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  ],
+  "definitions": {
+    "Address": {
+      "description": "Address",
+      "type": "string",
+      "pattern": "^sov1[a-zA-Z0-9]+$"
+    },
+    "Amount": {
+      "description": "A token amount.",
+      "type": "integer",
+      "format": "uint128",
+      "minimum": 0.0
+    },
+    "CallMessage": {
+      "description": "This enumeration represents the available call messages for interacting with the sov-bank module.",
+      "oneOf": [
+        {
+          "description": "Creates a new token with the specified name and initial balance.",
+          "type": "object",
+          "required": [
+            "create_token"
+          ],
+          "properties": {
+            "create_token": {
+              "type": "object",
+              "required": [
+                "admins",
+                "initial_balance",
+                "mint_to_address",
+                "token_name"
+              ],
+              "properties": {
+                "admins": {
+                  "description": "Admins list.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/SafeVec_20_of_MultiAddress_for_PubkeyWrapper"
+                    }
+                  ]
+                },
+                "initial_balance": {
+                  "description": "The initial balance of the new token.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/Amount"
+                    }
+                  ]
+                },
+                "mint_to_address": {
+                  "description": "The address of the account that the new tokens are minted to.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MultiAddress_for_PubkeyWrapper"
+                    }
+                  ]
+                },
+                "supply_cap": {
+                  "description": "The supply cap of the new token, if any.",
+                  "anyOf": [
+                    {
+                      "$ref": "#/definitions/Amount"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "token_decimals": {
+                  "description": "The number of decimal places this token's amounts will have.",
+                  "type": [
+                    "integer",
+                    "null"
+                  ],
+                  "format": "uint8",
+                  "minimum": 0.0
+                },
+                "token_name": {
+                  "description": "The name of the new token.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/SizedSafeString_for_128"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Transfers a specified amount of tokens to the specified address.",
+          "type": "object",
+          "required": [
+            "transfer"
+          ],
+          "properties": {
+            "transfer": {
+              "type": "object",
+              "required": [
+                "coins",
+                "to"
+              ],
+              "properties": {
+                "coins": {
+                  "description": "The amount of tokens to transfer.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/Coins"
+                    }
+                  ]
+                },
+                "to": {
+                  "description": "The address to which the tokens will be transferred.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MultiAddress_for_PubkeyWrapper"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Burns a specified amount of tokens.",
+          "type": "object",
+          "required": [
+            "burn"
+          ],
+          "properties": {
+            "burn": {
+              "type": "object",
+              "required": [
+                "coins"
+              ],
+              "properties": {
+                "coins": {
+                  "description": "The amount of tokens to burn.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/Coins"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Mints a specified amount of tokens.",
+          "type": "object",
+          "required": [
+            "mint"
+          ],
+          "properties": {
+            "mint": {
+              "type": "object",
+              "required": [
+                "coins",
+                "mint_to_address"
+              ],
+              "properties": {
+                "coins": {
+                  "description": "The amount of tokens to mint.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/Coins"
+                    }
+                  ]
+                },
+                "mint_to_address": {
+                  "description": "Address to mint tokens to",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MultiAddress_for_PubkeyWrapper"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Freezes a token so that the supply is frozen",
+          "type": "object",
+          "required": [
+            "freeze"
+          ],
+          "properties": {
+            "freeze": {
+              "type": "object",
+              "required": [
+                "token_id"
+              ],
+              "properties": {
+                "token_id": {
+                  "description": "Address of the token to be frozen",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/TokenId"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CallMessage2": {
+      "description": "This enumeration represents the available call messages for interacting with the `sov-sequencer-registry` module.",
+      "oneOf": [
+        {
+          "description": "Add a new sequencer to the sequencer registry.",
+          "type": "object",
+          "required": [
+            "register"
+          ],
+          "properties": {
+            "register": {
+              "type": "object",
+              "required": [
+                "amount",
+                "da_address"
+              ],
+              "properties": {
+                "amount": {
+                  "description": "The initial balance of the sequencer.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/Amount"
+                    }
+                  ]
+                },
+                "da_address": {
+                  "description": "The Da address of the sequencer you're registering.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MockAddress"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Increases the balance of the sequencer, transferring the funds from the sequencer account to the rollup.",
+          "type": "object",
+          "required": [
+            "deposit"
+          ],
+          "properties": {
+            "deposit": {
+              "type": "object",
+              "required": [
+                "amount",
+                "da_address"
+              ],
+              "properties": {
+                "amount": {
+                  "description": "The amount to increase.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/Amount"
+                    }
+                  ]
+                },
+                "da_address": {
+                  "description": "The DA address of the sequencer.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MockAddress"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Initiate a withdrawal of a sequencer's balance.",
+          "type": "object",
+          "required": [
+            "initiate_withdrawal"
+          ],
+          "properties": {
+            "initiate_withdrawal": {
+              "type": "object",
+              "required": [
+                "da_address"
+              ],
+              "properties": {
+                "da_address": {
+                  "description": "The DA address of the sequencer you're removing.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MockAddress"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Withdraw a sequencer's balance after waiting for the withdrawal period.",
+          "type": "object",
+          "required": [
+            "withdraw"
+          ],
+          "properties": {
+            "withdraw": {
+              "type": "object",
+              "required": [
+                "da_address"
+              ],
+              "properties": {
+                "da_address": {
+                  "description": "The DA address of the sequencer you're removing.",
+                  "allOf": [
+                    {
+                      "$ref": "#/definitions/MockAddress"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CallMessage3": {
+      "description": "This enumeration represents the available call messages for interacting with the `AttesterIncentives` module.",
+      "oneOf": [
+        {
+          "description": "Register an attester, the parameter is the bond amount",
+          "type": "object",
+          "required": [
+            "register_attester"
+          ],
+          "properties": {
+            "register_attester": {
+              "$ref": "#/definitions/Amount"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Start the first phase of the two-phase exit process",
+          "type": "string",
+          "enum": [
+            "begin_exit_attester"
+          ]
+        },
+        {
+          "description": "Finish the two phase exit",
+          "type": "string",
+          "enum": [
+            "exit_attester"
+          ]
+        },
+        {
+          "description": "Register a challenger, the parameter is the bond amount",
+          "type": "object",
+          "required": [
+            "register_challenger"
+          ],
+          "properties": {
+            "register_challenger": {
+              "$ref": "#/definitions/Amount"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Exit a challenger",
+          "type": "string",
+          "enum": [
+            "exit_challenger"
+          ]
+        },
+        {
+          "description": "Increases the balance of the attester.",
+          "type": "object",
+          "required": [
+            "deposit_attester"
+          ],
+          "properties": {
+            "deposit_attester": {
+              "$ref": "#/definitions/Amount"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "CallMessage4": {
+      "description": "This enumeration represents the available call messages for interacting with the `ExampleModule` module.",
+      "oneOf": [
+        {
+          "description": "Add a new prover as a bonded prover.",
+          "type": "object",
+          "required": [
+            "register"
+          ],
+          "properties": {
+            "register": {
+              "$ref": "#/definitions/Amount"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Increases the balance of the prover, transferring the funds from the prover account to the rollup.",
+          "type": "object",
+          "required": [
+            "deposit"
+          ],
+          "properties": {
+            "deposit": {
+              "$ref": "#/definitions/Amount"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "Unbonds the prover.",
+          "type": "string",
+          "enum": [
+            "exit"
+          ]
+        }
+      ]
+    },
+    "CallMessage5": {
+      "description": "Represents the available call messages for interacting with the sov-accounts module.",
+      "oneOf": [
+        {
+          "description": "Inserts a new credential id for the corresponding Account.",
+          "type": "object",
+          "required": [
+            "insert_credential_id"
+          ],
+          "properties": {
+            "insert_credential_id": {
+              "$ref": "#/definitions/CredentialId"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Coins": {
+      "description": "Structure that stores information specifying a given `amount` (type [`Amount`]) of coins stored at a `token_id` (type [`crate::TokenId`]).",
+      "type": "object",
+      "required": [
+        "amount",
+        "token_id"
+      ],
+      "properties": {
+        "amount": {
+          "description": "The number of tokens",
+          "allOf": [
+            {
+              "$ref": "#/definitions/Amount"
+            }
+          ]
+        },
+        "token_id": {
+          "description": "The ID of the token",
+          "allOf": [
+            {
+              "$ref": "#/definitions/TokenId"
+            }
+          ]
+        }
+      }
+    },
+    "CredentialId": {
+      "description": "32 bytes in hexadecimal format, with `0x` prefix.",
+      "type": "string",
+      "pattern": "^0x[a-fA-F0-9]{64}$"
+    },
+    "MockAddress": {
+      "description": "Mock address; 32 bytes in hex-encoded format",
+      "type": "string",
+      "pattern": "^[a-fA-F0-9]{64}$"
+    },
+    "MultiAddress_for_PubkeyWrapper": {
+      "description": "A generic VM-compatible address enum, enabling supporting for both Sov SDK standard SHA-256 derived addresses and VM-specific addresses.",
+      "oneOf": [
+        {
+          "description": "A standard address derived from a SHA-256 hash of a public key.",
+          "type": "object",
+          "required": [
+            "Standard"
+          ],
+          "properties": {
+            "Standard": {
+              "$ref": "#/definitions/Address"
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "description": "A VM-specific address type, allowing native support of the VM's address format.",
+          "type": "object",
+          "required": [
+            "Vm"
+          ],
+          "properties": {
+            "Vm": {
+              "$ref": "#/definitions/PubkeyWrapper"
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    },
+    "NotInstantiable": {
+      "type": "null"
+    },
+    "PubkeyWrapper": {
+      "description": "32 bytes in base58 encoding",
+      "type": "string",
+      "pattern": "[1-9A-HJ-NP-Za-km-z]{32,44}"
+    },
+    "SafeVec_20_of_MultiAddress_for_PubkeyWrapper": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/MultiAddress_for_PubkeyWrapper"
+      },
+      "maxItems": 20,
+      "minItems": 0
+    },
+    "SizedSafeString_for_128": {
+      "description": "A String wrapper which enforces certain constraints to ensure it is safely displayable as part of a transaction without confusing the user. Only printable ASCII is allowed, and the length is limited.\n\n`SchemaGenerator` implementation is forbidden on `std::String` by default, to avoid the possibility of untrusted input supplying highly confusing text that tricks users into misunderstanding the transaction they are signing. `SafeString` enforces some constraints to mitigate this risk. If you need to encode a large data blob such as a hex string, use a `Vec<u8>` with the `[sov_wallet(display = \"hex\")]` attribute (or any of the other display styles). Avoid raw `String`s if possible. If an actual `String` is absolutely necessary, then a newtype wrapper can be used, on which `SchemaGenerator` is derived manually.",
+      "type": "string"
+    },
+    "TokenId": {
+      "description": "A bech32 string",
+      "type": "string",
+      "pattern": "token_1[a-zA-Z0-9]+$"
+    }
+  }
+}

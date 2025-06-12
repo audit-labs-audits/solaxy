@@ -1,0 +1,20 @@
+[package]
+name = "tests"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2021"
+
+[dependencies]
+# External dependencies from crates.io
+bincode = { workspace = true }
+tokio = { workspace = true }
+
+# Solana & Agave
+solana-logger = { workspace = true }
+solana-sdk = { workspace = true }
+solana-test-validator = { workspace = true }
+anchor-lang = { workspace = true }
+
+# Locals
+proxy = { workspace = true }
+example-gated-program = { workspace = true }

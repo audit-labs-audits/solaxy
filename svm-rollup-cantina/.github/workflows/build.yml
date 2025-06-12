@@ -1,0 +1,128 @@
+name: Build rollup binary
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -D warnings
+  # This is faster for CI: https://github.com/dtolnay/rust-toolchain/issues/26.
+  CARGO_INCREMENTAL: "0"
+
+# Automatically cancels a job if a new commit if pushed to the same PR, branch, or tag.
+# Source: <https://stackoverflow.com/a/72408109/5148606>
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # Except in `main` branch! Any canceled job will cause the
+  # CI run to fail, and we want to keep a clean history for major branches.
+  cancel-in-progress: ${{ (github.ref != 'refs/heads/main') }}
+
+jobs:
+  build:
+    name: Build binary
+    runs-on: warp-ubuntu-2404-x64-8x
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: rui314/setup-mold@v1
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          version: "23.2"
+
+      - name: Install cargo-risczero
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-risczero@0.20
+
+      - name: Install sp1
+        shell: bash
+        env:
+          SHELL: /bin/bash
+        run: |
+          curl -L https://sp1.succinct.xyz | bash
+          ~/.sp1/bin/sp1up
+          ~/.sp1/bin/cargo-prove prove --version
+          ~/.sp1/bin/cargo-prove prove install-toolchain
+          pwd
+
+      - name: Install Rust
+        run: rustup show
+
+      - name: Add SSH private keys for private repos
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: |
+            ${{ secrets.SOV_SDK_PRIVATE_KEY }}
+            ${{ secrets.SOV_WALLET_FORMAT_PRIVATE_KEY }}
+            ${{ secrets.SVM_ENGINE_PRIVATE_KEY }}
+            ${{ secrets.NITRO_DATA_MODULE_PRIVATE_KEY }}
+
+      - name: Configure git to use SSH
+        run: git config --global url.ssh://git@github.com/.insteadOf https://github.com/
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+          cache-provider: "buildjet"
+
+      # Install system dependencies
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential cmake pkg-config libudev-dev
+
+      # add swap space to accommodate memory spikes
+      - name: Set up swap space
+        run: |
+          sudo swapon --show
+          sudo fallocate -l 16G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          sudo swapon --show
+          free -h
+
+      - run: cargo build --release -p svm-rollup
+
+      - name: Save artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: svm-rollup
+          path: target/release/svm-rollup
+
+  deploy:
+    strategy:
+      fail-fast: true
+    needs: build
+    name: Deploy to AWS
+    runs-on: warp-ubuntu-2404-x64-8x
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      # this needs to match the name + path from the upload job above
+      - name: Pull down SVM rollup binary
+        uses: actions/download-artifact@v4
+        with:
+          name: svm-rollup
+          path: target/release
+
+      - name: Deploy to EC2
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ubuntu
+          DEPLOY_PATH: "/home/ubuntu/svm-rollup"
+          BINARY_PATH: "./target/release/svm-rollup"
+          ROLLUP_CONFIG_PATH: "./crates/rollup/mock_rollup_config.toml"
+          GENESIS_CONFIG_PATH: "./crates/test-data/genesis/demo/mock"
+        run: |
+          chmod +x ./scripts/deploy.sh
+          ./scripts/deploy.sh

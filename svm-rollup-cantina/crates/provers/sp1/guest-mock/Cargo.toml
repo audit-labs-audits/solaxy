@@ -1,0 +1,73 @@
+[package]
+name = "sov-prover-guest-mock-sp1"
+version = "0.3.0"
+edition = "2021"
+resolver = "2"
+
+[workspace]
+
+[dependencies]
+# External dependencies from crates.io
+sp1-zkvm = { version = "3.0.0" }
+
+# Sovereign dependencies
+sov-mock-zkvm = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-modules-api = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-modules-stf-blueprint = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-sp1-adapter = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-state = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+
+# MockDa specific
+sov-metrics = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f", optional = true }
+sov-mock-da = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+
+# Locals
+stf = { path = "../../../stf" }
+svm-types = { path = "../../../svm-types" }
+
+[patch.crates-io]
+# SP1 patches
+sha2-v0-9-9 = { git = "https://github.com/sp1-patches/RustCrypto-hashes", package = "sha2", rev = "32cd33136ff22cc977ea6a95dd5a322a1de7283c" }
+sha2-v0-10-8 = { git = "https://github.com/sp1-patches/RustCrypto-hashes", package = "sha2", rev = "1f224388fdede7cef649bce0d63876d1a9e3f515" }
+curve25519-dalek = { git = "https://github.com/sp1-patches/curve25519-dalek", rev = "1d73fd95f1a76bee8f46643cf78bbccc1fb06ede" }
+ed25519-consensus = { git = "https://github.com/sp1-patches/ed25519-consensus", rev = "2b2c4b43344bc4daf5b1326f367f2d9d661eeabb" }
+tiny-keccak = { git = "https://github.com/sp1-patches/tiny-keccak", rev = "bf0b28f63510a90c7b6c21ac6ff461c93ecd2331" }
+
+# Solana (we have to patch again because this is a separate workspace from the root)
+curve25519-dalek_v3 = { package = "curve25519-dalek", git = "https://github.com/solana-labs/curve25519-dalek", rev = "b500cdc2a920cd5bff9e2dd974d7b97349d61464" }
+solana-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-zk-token-sdk = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+
+# Patches for svm-engine
+getrandom_v0_1 = { package = "getrandom", git = "https://github.com/nitro-svm/getrandom", branch = "0.1-zkvm" }
+solana-bpf-loader-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-compute-budget = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-compute-budget-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-program-runtime = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-sdk = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-svm = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-system-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-vote = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+
+[profile.dev]
+opt-level = 3
+
+[profile.dev.build-override]
+opt-level = 3
+
+[profile.release]
+debug = 1
+lto = true
+
+[profile.release.build-override]
+opt-level = 3
+
+[features]
+default = []
+bench = [
+	"dep:sov-metrics",
+	"sov-modules-api/bench",
+	"sov-modules-stf-blueprint/bench",
+	"sov-sp1-adapter/bench",
+	"sov-state/bench",
+]

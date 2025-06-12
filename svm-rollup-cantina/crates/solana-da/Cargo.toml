@@ -1,0 +1,64 @@
+[package]
+name = "solana-da"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+authors.workspace = true
+homepage.workspace = true
+publish.workspace = true
+repository.workspace = true
+
+[dependencies]
+# External dependencies from crates.io
+anyhow = { workspace = true }
+bon = { workspace = true }
+borsh = { workspace = true }
+bytes = { workspace = true }
+futures = { workspace = true }
+jsonrpsee = { workspace = true, features = ["ws-client"], optional = true }
+serde = { workspace = true, features = ["alloc", "derive", "rc"] }
+serde_json = { workspace = true, features = ["alloc"] }
+thiserror = { workspace = true }
+tokio = { workspace = true, optional = true }
+tracing = { workspace = true, features = ["attributes"] }
+
+# Sovereign dependencies
+sov-rollup-interface = { workspace = true }
+
+# Solana & Agave
+anchor-lang = { workspace = true, optional = true }
+solana-client = { workspace = true, optional = true }
+solana-rpc-client = { workspace = true, optional = true }
+solana-rpc-client-api = { workspace = true, optional = true }
+solana-sdk = { workspace = true }
+solana-transaction-status = { workspace = true, optional = true }
+
+# Nitro dependencies
+blober = { workspace = true, optional = true }
+nitro-da-client = { workspace = true, optional = true }
+nitro-da-indexer-api = { workspace = true }
+nitro-da-proofs = { workspace = true }
+svm-engine-keys = { workspace = true }
+svm-types = { workspace = true }
+
+[dev-dependencies]
+solana-da = { workspace = true, features = ["native"] }
+
+[lints]
+workspace = true
+
+[features]
+native = [
+	"dep:anchor-lang",
+	"dep:blober",
+	"dep:jsonrpsee",
+	"dep:nitro-da-client",
+	"dep:solana-client",
+	"dep:solana-rpc-client",
+	"dep:solana-rpc-client-api",
+	"dep:solana-transaction-status",
+	"dep:tokio",
+	"solana-da/native",
+	"sov-rollup-interface/native",
+	"svm-types/native",
+]

@@ -1,0 +1,25 @@
+[package]
+name = "svm-engine-rpc"
+version.workspace = true
+edition.workspace = true
+publish = false
+
+[dependencies]
+# External dependencies from crates.io
+async-trait = { workspace = true }
+futures = { workspace = true }
+http = { workspace = true }
+jsonrpsee = { workspace = true }
+tower = { workspace = true }
+serde = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+
+# Solana & Agave
+solana-sdk = { workspace = true }
+solana-svm = { workspace = true }
+solana-program = { workspace = true }
+
+# Locals
+svm-engine = { workspace = true }
+once_cell = "1.20.3"

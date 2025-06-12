@@ -1,0 +1,10 @@
+{
+    "libpath": "/opt/libindexer.so",
+    "db_path": "/var/indexer.redb",
+    "blobers": [
+        "GjgHgjvRV9H6wmAv5B8Q7WQhFTzpXEBjwFPQw7a44xae",
+        "5hrYCqZvkZYvx2ZcWYaCspjfPEW2SPHkeqeXnsLKe28i"
+    ],
+    "jsonrpc_address": "0.0.0.0:9696",
+    "garbage_collection": "Fixed"
+}

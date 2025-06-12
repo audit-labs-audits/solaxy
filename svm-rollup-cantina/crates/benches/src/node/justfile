@@ -1,0 +1,32 @@
+set export := true
+
+# Default values for num blocks and transactions per block
+
+BLOCKS := env('BLOCKS', '10')
+TXNS_PER_BLOCK := env('TXNS_PER_BLOCK', '200')
+PRELOADED_ACCOUNTS := env('PRELOADED_ACCOUNTS', '1')
+
+[working-directory('../../')]
+basic:
+    echo "Running basic benchmark with {{ BLOCKS }} blocks, {{ TXNS_PER_BLOCK }} transactions per block, and {{ PRELOADED_ACCOUNTS }} accounts pre-loaded"
+    echo "Method: Coarse Timers"
+    echo "Output: Standard"
+    cargo bench --bench=rollup_coarse_measure
+
+[working-directory('../../')]
+criterion:
+    echo "Running criterion bench with {{ TXNS_PER_BLOCK }} transactions per block"
+    echo "Method: Criterion"
+    echo "Output: Criterion"
+    cargo bench --bench=rollup_bench
+
+[confirm('WARNING: Flamegraph requires sudo. The Makefile does cleanup, but there is a unforeseen risk of files being owned by root after the script is done. The Makefile also does full cleanup so subsequent builds with default user will be from scratch.\nProceed (y/n)')]
+[private]
+[working-directory('../../')]
+_flamegraph:
+    sudo BLOCKS={{ BLOCKS }} TXNS_PER_BLOCK={{ TXNS_PER_BLOCK }} PRELOADED_ACCOUNTS={{ PRELOADED_ACCOUNTS }} CARGO_PROFILE_BENCH_DEBUG=true cargo flamegraph --root -o benches/flamegraph.svg --bench rollup_coarse_measure && sudo rm -rf benches/demo_data
+
+flamegraph: && _flamegraph
+    echo "Running basic benchmark with {{ BLOCKS }} blocks, {{ TXNS_PER_BLOCK }} transactions per block, and {{ PRELOADED_ACCOUNTS }} accounts pre-loaded"
+    echo "Method: Coarse Timers"
+    echo "Output: Flamegraph"

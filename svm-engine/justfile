@@ -1,0 +1,62 @@
+[group('lint')]
+[private]
+fmt-justfile:
+    just --fmt --unstable --check
+
+[group('lint')]
+[private]
+fmt-justfile-fix:
+    just --fmt --unstable
+
+# Run lint and formatting checks for the entire project
+[group('lint')]
+lint: fmt-justfile build-programs
+    cargo +nightly fmt -- --check
+    cargo clippy --all-targets --all-features
+    zepter
+
+# Fix lint and formatting issues in the entire project
+[group('lint')]
+lint-fix: fmt-justfile-fix build-programs
+    cargo +nightly fmt
+    cargo clippy --fix --allow-dirty --allow-staged --all-targets --all-features
+    zepter
+
+# Run tests for the entire project
+[group('test')]
+test: build-programs
+    cargo nextest run --workspace --status-level skip
+
+# Run a full simulation test for the runner
+[group('test')]
+test-runner:
+    cargo nextest run --workspace -E 'test(full_simulation)' -- --ignored
+
+# Run a local validator for the runner
+[group('local-validator')]
+run-local-validator: build-programs
+    #!/usr/bin/env bash
+    set -euxo pipefail
+
+    RUST_LOG=warn,indexer=info solana-test-validator \
+        --ledger ./target/test-ledger \
+        --limit-ledger-size 1000000 \
+        --bpf-program Asq13rW8nzJKyVU8pYHprK54i5gAgKKLxWsi3asd79Y2 ./crates/runner/manager/example-gated-program/target/deploy/example_gated_program.so \
+        --bpf-program 3ATxf2BgWJ1SvMvtz3sZJWfVMnFzZvtXyLZ5Shh6UnnA ./crates/runner/manager/example-gated-program/target/deploy/proxy.so
+
+# Build the programs
+[group('build')]
+[working-directory('./crates/runner/manager/example-gated-program')]
+build-programs:
+    anchor build --no-idl
+
+# Build the entire project
+[group('build')]
+build:
+    cargo build --release
+
+# Clean the entire project
+[group('clean')]
+clean:
+    cargo clean
+    mkdir target

@@ -1,0 +1,73 @@
+[package]
+name = "benches"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# External dependencies from crates.io
+anyhow = { workspace = true }
+bincode = { workspace = true }
+borsh = { workspace = true, features = ["derive"] }
+clap = { workspace = true, features = ["derive"] }
+derivative = { workspace = true }
+derive_more = { workspace = true }
+futures = { workspace = true, default-features = false }
+hex = { workspace = true }
+humantime = { workspace = true }
+prettytable-rs = { workspace = true }
+progenitor = { workspace = true }
+reqwest = { workspace = true, default-features = false }
+serde = { workspace = true, default-features = false, features = [
+    "alloc",
+    "derive",
+] }
+strum = { workspace = true, features = ["derive"] }
+tempfile = { workspace = true }
+tokio = { workspace = true, default-features = false }
+tracing = { workspace = true, default-features = false }
+
+# Sovereign dependencies
+sov-address = { workspace = true }
+sov-bank = { workspace = true }
+sov-blob-storage = { workspace = true }
+sov-db = { workspace = true }
+sov-metrics = { workspace = true }
+sov-mock-da = { workspace = true, features = ["arbitrary", "native"] }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+sov-modules-api = { workspace = true, features = [
+    "arbitrary",
+    "bench",
+    "native",
+] }
+sov-modules-macros = { workspace = true }
+sov-modules-rollup-blueprint = { workspace = true }
+sov-modules-stf-blueprint = { workspace = true, features = ["bench"] }
+sov-rollup-interface = { workspace = true, features = ["arbitrary"] }
+sov-sequencer = { workspace = true }
+sov-sp1-adapter = { workspace = true, features = [
+    "arbitrary",
+    "bench",
+    "native",
+] }
+sov-state = { workspace = true, features = ["arbitrary"] }
+sov-test-utils = { workspace = true, features = ["arbitrary"] }
+
+# Solana & Agave
+solana-sdk = { workspace = true }
+
+# Locals
+stf = { workspace = true, features = ["native", "test-utils"] }
+svm = { workspace = true, features = ["dev"] }
+svm-types = { workspace = true, features = ["arbitrary", "native"] }
+
+[[bench]]
+name = "rollup_coarse_measure"
+path = "src/node/rollup_coarse_measure.rs"
+harness = false
+
+[features]
+gas-constant-estimation = [
+	"sov-metrics/gas-constant-estimation",
+	"sov-modules-api/gas-constant-estimation",
+	"sov-modules-stf-blueprint/gas-constant-estimation",
+]

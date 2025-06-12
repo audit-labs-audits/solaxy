@@ -1,0 +1,14 @@
+[package]
+name = "svm-runner-syncer"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# External dependencies from crates.io
+async-trait = { workspace = true }
+
+# Locals
+svm-engine = { workspace = true }

@@ -1,0 +1,19 @@
+# this is a sample configuration file for running svm-rollup with systemd
+[Unit]
+Description=SVM Rollup
+After=network.target
+
+[Service]
+Type=simple
+# make sure the user matches the session user
+User=ubuntu
+EnvironmentFile=/home/ubuntu/svm-rollup/.env
+# this needs match where the config files are stored
+WorkingDirectory=/home/ubuntu/svm-rollup
+ExecStart=/home/ubuntu/svm-rollup/svm-rollup --rollup-config-path=/home/ubuntu/svm-rollup/mock_rollup_config.toml --genesis-config-dir=/home/ubuntu/svm-rollup/mock
+Restart=always
+RestartSec=10s
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

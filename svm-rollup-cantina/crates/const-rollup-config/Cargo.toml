@@ -1,0 +1,8 @@
+[package]
+name = "const-rollup-config"
+version = { workspace = true }
+edition = { workspace = true }
+authors = { workspace = true }
+license-file = { workspace = true }
+homepage = { workspace = true }
+publish = false

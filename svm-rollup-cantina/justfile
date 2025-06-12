@@ -1,0 +1,175 @@
+mod benches 'crates/benches/justfile'
+mod node-benches 'crates/benches/src/node/justfile'
+mod rollup 'crates/rollup/justfile'
+
+projects := '.:crates/provers/sp1/guest-celestia:crates/provers/sp1/guest-mock:crates/provers/sp1/guest-solana'
+cargo-fmt := 'cargo +nightly fmt --all'
+cargo-fmt-check := cargo-fmt + ' --check'
+cargo-clippy := 'cargo clippy --all-targets --all-features'
+cargo-clippy-fix := cargo-clippy + ' --fix --allow-dirty --allow-staged'
+
+# Build the project
+[group('build')]
+build:
+    cargo build
+
+[group('clean')]
+[private]
+clean-inner dir='.':
+    cd {{ dir }} && cargo clean
+
+# Cleans compiled
+[group('clean')]
+clean:
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in $PROJECTS; do
+        just clean-inner $project
+    done
+
+# Runs test suite using nextest
+[group('test')]
+test:
+    cargo nextest run --release --workspace --all-features --status-level skip
+
+# Runs test suite using default features
+[group('test')]
+test-default-features:
+    cargo nextest run --workspace --status-level skip
+
+# Install SP1 tooling
+[group('tooling')]
+install-sp1-toolchain:
+    curl -L https://sp1up.succinct.xyz | bash
+    ~/.sp1/bin/sp1up --token "$$GITHUB_TOKEN"
+    ~/.sp1/bin/cargo-prove prove --version
+    cargo +succinct --version
+
+# Set up dev tools
+[group('tooling')]
+install-dev-tools: install-sp1-toolchain
+    ## Backup VS Code settings to `.vscode/settings.json.bak`.
+    cp -u .vscode/settings.json .vscode/settings.json.bak || true
+    ## Install the default suggested VS Code settings.
+    cp -u .vscode/settings.default.json .vscode/settings.json
+    cargo install cargo-hack
+    cargo install cargo-udeps
+    cargo install flaky-finder
+    cargo install cargo-nextest --locked
+    cargo install zepter
+
+[group('lint')]
+[private]
+fmt-justfile:
+    just --fmt --unstable --check
+
+[group('lint')]
+[private]
+fmt-justfile-fix:
+    just --fmt --unstable
+
+[group('lint')]
+[private]
+fmt-project dir:
+    cd {{ dir }} && {{ cargo-fmt-check }}
+
+[group('lint')]
+[private]
+fmt-project-fix dir:
+    cd {{ dir }} && {{ cargo-fmt }}
+
+# Run fmt checks in all projects
+[group('lint')]
+fmt: fmt-justfile
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in $PROJECTS; do
+        just fmt-project $project
+    done
+
+# Run formatting
+[group('lint')]
+fmt-fix: fmt-justfile-fix
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in $PROJECTS; do
+        just fmt-project-fix $project
+    done
+
+[group('lint')]
+[private]
+run-zepter dir='.' config='.cargo/zepter.yaml':
+    cd {{ dir }} && zepter run -c {{ config }} check
+
+[group('lint')]
+[private]
+run-zepter-fix dir='.' config='.cargo/zepter.yaml':
+    cd {{ dir }} && zepter run -c {{ config }}
+
+# Run zepter checks
+[group('lint')]
+zepter: run-zepter
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in ${PROJECTS[@]:1}; do
+        just run-zepter $project '../../../../.cargo/zepter.yaml'
+    done
+
+# Run zepter fixes
+[group('lint')]
+zepter-fix: run-zepter-fix
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in ${PROJECTS[@]:1}; do
+        just run-zepter-fix $project '../../../../.cargo/zepter.yaml'
+    done
+
+[group('lint')]
+[private]
+run-clippy dir='.':
+    cd {{ dir }} && {{ cargo-clippy }}
+
+[group('lint')]
+[private]
+run-clippy-fix dir='.':
+    cd {{ dir }} && {{ cargo-clippy-fix }}
+
+# Run formatting and lint checks
+[group('lint')]
+lint: fmt zepter
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in $PROJECTS; do
+        just run-clippy $project
+    done
+
+# Run formatting and linting fixes
+[group('lint')]
+lint-fix: fmt-fix zepter-fix
+    #!/usr/bin/env bash
+    set -euxo pipefail
+    PROJECTS=$(echo {{ projects }} | sed 's/:/ /g')
+    for project in $PROJECTS; do
+        just run-clippy-fix $project
+    done
+
+# Check that all feature combinations work as expected
+[group('lint')]
+check-features:
+    cargo hack check --workspace --feature-powerset --exclude-features default --all-targets
+
+# Check for any unused dependencies
+[group('lint')]
+find-unused-deps:
+    cargo +nightly udeps --all-targets --all-features
+
+# Check for any tests that fail on occasion
+[group('test')]
+find-flaky-tests:
+    flaky-finder -j16 -r320 --continue "cargo test -- --nocapture"

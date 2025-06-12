@@ -1,0 +1,9 @@
+mod bank;
+mod celestia;
+mod evm;
+mod forced_sequencer_registration;
+mod prover;
+mod rest_api;
+mod restart;
+mod test_helpers;
+mod wallet;

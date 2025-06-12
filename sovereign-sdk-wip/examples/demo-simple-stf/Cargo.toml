@@ -1,0 +1,32 @@
+[package]
+name = "demo-simple-stf"
+version = "0.3.0"
+authors = { workspace = true }
+edition = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+repository = { workspace = true }
+publish = false
+
+[lints]
+workspace = true
+
+[dependencies]
+serde = { workspace = true, default-features = false, features = [
+    "alloc",
+    "derive",
+] }
+sha2 = { workspace = true, default-features = false }
+
+sov-rollup-interface = { workspace = true }
+
+[dev-dependencies]
+sov-mock-da = { workspace = true, features = ["native"] }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+
+[features]
+native = [
+    "sov-rollup-interface/native",
+    "sov-mock-da/native",
+    "sov-mock-zkvm/native"
+]

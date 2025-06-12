@@ -1,0 +1,63 @@
+name: full-simulation
+
+on:
+  workflow_dispatch:
+
+env:
+  ANCHOR_CLI: 0.30.1
+  ANCHOR_REVISION: db6da5c67d896e0a94c158f69e9b235e364b3064
+  SOLANA_CLI: v2.0.5
+
+jobs:
+  full-simulation:
+    name: Test Full simulation
+    runs-on: warp-ubuntu-2404-x64-8x
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v2
+        with:
+          version: "23.2"
+
+      # You can use `rustup show` to install and select the right Rust toolchain
+      # if you have a `rust-toolchain.toml` file: https://github.com/rust-lang/rustup/issues/1397
+      - name: Install Rust
+        run: rustup show
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-on-failure: true
+
+      - name: Install Anchor dependencies
+        run: |
+          # Install required tools
+          sudo apt-get update
+          sudo apt-get install -y pkg-config build-essential libudev-dev
+
+      - name: Install Solana tools
+        run: |
+          sh -c "$(curl -sSfL https://release.anza.xyz/${SOLANA_CLI}/install)"
+          echo "$HOME/.local/share/solana/install/active_release/bin" >> "$GITHUB_PATH"
+
+      - name: Install Anchor management tools
+        run: cargo install --git https://github.com/coral-xyz/anchor avm --locked --force
+
+      - name: Install Anchor
+        run: |
+          avm install "$ANCHOR_REVISION"
+          echo "$HOME/.avm/bin" >> "$GITHUB_PATH"
+
+      - name: Install cargo-nextest
+        uses: taiki-e/install-action@nextest
+
+      - name: Install just
+        uses: extractions/setup-just@v2
+
+      - name: Start local validator
+        run: just start-local-validator
+
+      - name: Run unit tests
+        run: just test-runner

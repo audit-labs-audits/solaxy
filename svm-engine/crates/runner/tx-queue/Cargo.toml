@@ -1,0 +1,17 @@
+[package]
+name = "svm-runner-tx-queue"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# External dependencies from crates.io
+async-trait = { workspace = true }
+jsonrpsee = { workspace = true, features = ["macros", "server", "client"] }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+
+[features]
+rpc-writer = []

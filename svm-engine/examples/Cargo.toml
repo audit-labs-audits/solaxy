@@ -1,0 +1,17 @@
+[package]
+name = "svm-examples"
+description = "Examples for svm-runner"
+version.workspace = true
+authors.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = false
+
+[dev-dependencies]
+# External dependencies from crates.io
+bincode = { workspace = true }
+tokio = { workspace = true }
+
+# Solana & Agave
+solana-client = { workspace = true }
+solana-sdk = { workspace = true }

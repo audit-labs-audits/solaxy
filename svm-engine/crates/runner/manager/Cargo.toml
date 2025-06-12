@@ -1,0 +1,46 @@
+[package]
+name = "svm-runner-manager"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+# External dependencies from crates.io
+async-trait = { workspace = true }
+bincode = { workspace = true }
+dashmap = { workspace = true }
+futures = { workspace = true }
+jsonrpsee = { workspace = true }
+serde = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+yellowstone-grpc-client = { workspace = true }
+yellowstone-grpc-proto = { workspace = true }
+
+# Solana & Agave
+solana-account-decoder = { workspace = true }
+solana-client = { workspace = true }
+solana-rpc-client-api = { workspace = true }
+solana-sdk = { workspace = true }
+solana-svm = { workspace = true }
+solana-transaction-status = { workspace = true }
+
+# Locals
+svm-engine = { workspace = true }
+svm-runner = { workspace = true }
+svm-runner-block-builder = { workspace = true }
+svm-runner-relay = { workspace = true }
+svm-runner-rpc = { workspace = true }
+svm-runner-syncer = { workspace = true }
+svm-runner-tx-queue = { workspace = true }
+
+[dev-dependencies]
+# Solana & Agave
+anchor-lang = { workspace = true }
+
+# Locals
+svm-runner-client = { workspace = true }
+example-gated-program = { workspace = true }
+proxy = { workspace = true }

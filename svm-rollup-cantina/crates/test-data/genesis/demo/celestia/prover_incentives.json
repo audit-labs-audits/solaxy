@@ -1,0 +1,16 @@
+{
+  "proving_penalty": [
+    10,
+    10
+  ],
+  "minimum_bond": [
+    1000,
+    1000
+  ],
+  "initial_provers": [
+    [
+      "HjjEhif8MU9DtnXtZc5hkBu9XLAkAYe1qwzhDoxbcECv",
+      "200000"
+    ]
+  ]
+}

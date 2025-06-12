@@ -1,0 +1,23 @@
+{
+  "gas_token_config": {
+    "token_name": "sov-token",
+    "address_and_balances": [
+      [
+        "HjjEhif8MU9DtnXtZc5hkBu9XLAkAYe1qwzhDoxbcECv",
+        "50000000000"
+      ],
+      [
+        "BymquZhXWhdiPhf9yxwdmEUk2K8oWMJXe9KTx76XG39h",
+        "1000000000"
+      ],
+      [
+        "7bWFTGcxY59KfAc5p7SaBaPieQkcSBXs7xCyRoL7vPtf",
+        "1000000000"
+      ]
+    ],
+    "admins": [
+      "HjjEhif8MU9DtnXtZc5hkBu9XLAkAYe1qwzhDoxbcECv"
+    ]
+  },
+  "tokens": []
+}

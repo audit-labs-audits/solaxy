@@ -1,0 +1,94 @@
+{
+  "collector_id": "2MCVmcuUcREwQKDS3HazuYctkkbZV3XRMspM5eLWRZUV",
+  "creation_time": 0,
+  "accounts": {
+    "AVxHjnUapzK8C3hQuiyCz7R22bag2CWGNor9v6YZQuJh": {
+      "lamports": 1000000000000,
+      "data": [],
+      "owner": "11111111111111111111111111111111",
+      "executable": false,
+      "rentEpoch": 124
+    },
+    "C7zRFydqurVQArmveAKnB11j6WHkFERyH4FYMzSQDRMh": {
+      "lamports": 1000000000000,
+      "data": [],
+      "owner": "11111111111111111111111111111111",
+      "executable": false,
+      "rentEpoch": 124
+    },
+    "7kGwm4g3oSFUT9HbNqz3ovVK4qShk9AESEW8oBrjPwJK": {
+      "lamports": 1000000000000,
+      "data": [],
+      "owner": "11111111111111111111111111111111",
+      "executable": false,
+      "rentEpoch": 124
+    },
+    "HsNWbHYHfXMxBs6UJoKQm9Y5gcrPA2BJgXn2VHFawgAJ": {
+      "lamports": 1000000000000,
+      "data": [],
+      "owner": "11111111111111111111111111111111",
+      "executable": false,
+      "rentEpoch": 124
+    }
+  },
+  "native_instruction_processors": [],
+  "rewards_pools": {},
+  "ticks_per_slot": 1024,
+  "poh_config": {
+    "target_tick_duration": {
+      "secs": 160,
+      "nanos": 0
+    },
+    "target_tick_count": 0,
+    "hashes_per_tick": 0
+  },
+  "__backwards_compat_with_v0_23": 0,
+  "fee_rate_governor": {
+    "lamportsPerSignature": 0,
+    "targetLamportsPerSignature": 10000,
+    "targetSignaturesPerSlot": 20000,
+    "minLamportsPerSignature": 0,
+    "maxLamportsPerSignature": 0,
+    "burnPercent": 50
+  },
+  "rent": {
+    "lamports_per_byte_year": 3481,
+    "exemption_threshold": 2,
+    "burn_percent": 50
+  },
+  "inflation": {
+    "initial": 0.08,
+    "terminal": 0.015,
+    "taper": 0.15,
+    "foundation": 0.05,
+    "foundationTerm": 7.0,
+    "unused": 0
+  },
+  "epoch_schedule": {
+    "slotsPerEpoch": 432000,
+    "leaderScheduleSlotOffset": 432000,
+    "warmup": true,
+    "firstNormalEpoch": 14,
+    "firstNormalSlot": 6240
+  },
+  "epoch_rewards": {
+    "distribution_starting_block_height": 0,
+    "num_partitions": 1,
+    "parent_blockhash": [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0
+    ],
+    "total_points": 0,
+    "total_rewards": 0,
+    "distributed_rewards": 0,
+    "active": true
+  },
+  "clock": {
+    "slot": 0,
+    "epoch_start_timestamp": 0,
+    "epoch": 0,
+    "leader_schedule_epoch": 0,
+    "unix_timestamp": 0
+  },
+  "cluster_type": "Development"
+}

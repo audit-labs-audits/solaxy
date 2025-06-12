@@ -1,0 +1,129 @@
+[package]
+name = "sov-demo-rollup"
+version = "0.3.0"
+authors = { workspace = true }
+edition = { workspace = true }
+homepage = { workspace = true }
+license = { workspace = true }
+repository = { workspace = true }
+publish = false
+default-run = "sov-demo-rollup"
+
+[lints]
+workspace = true
+
+[dependencies]
+# non-optional dependencies
+const-rollup-config = { path = "../const-rollup-config" }
+sov-address = { workspace = true, features = ["evm"] }
+sov-celestia-adapter = { workspace = true, features = ["native"] }
+sov-mock-da = { workspace = true, features = ["native"] }
+sov-rollup-interface = { workspace = true, features = ["native"] }
+sov-stf-runner = { workspace = true }
+
+# Sovereign crates
+sov-bank = { workspace = true, features = ["native"] }
+sov-cli = { workspace = true }
+sov-metrics = { workspace = true, optional = true }
+sov-db = { workspace = true }
+sov-ethereum = { workspace = true, features = ["local"] }
+sov-kernels = { workspace = true, features = ["native"] }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+sov-modules-api = { workspace = true, features = ["native"] }
+sov-modules-rollup-blueprint = { workspace = true, features = ["native"] }
+sov-modules-stf-blueprint = { workspace = true, features = ["native"] }
+sov-risc0-adapter = { workspace = true, features = ["native"] }
+sov-sequencer = { workspace = true }
+sov-sp1-adapter = { workspace = true, features = ["native"] }
+sov-state = { workspace = true, features = ["native"] }
+
+demo-stf = { workspace = true, features = ["native"] }
+
+risc0 = { path = "./provers/risc0" }
+sp1 = { path = "./provers/sp1" }
+
+borsh = { workspace = true, features = ["bytes", "derive"] }
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+axum = { workspace = true, default-features = false }
+jsonrpsee = { workspace = true, features = ["http-client", "server", "ws-client"] }
+schemars = { workspace = true }
+serde = { workspace = true, default-features = false, features = ["alloc", "derive"] }
+serde_json = { workspace = true, default-features = false, features = ["alloc"] }
+hex = { workspace = true, optional = true }
+tokio = { workspace = true, features = ["rt-multi-thread", "sync", "time", "macros", "tracing"] }
+tracing = { workspace = true }
+prometheus_exporter = "0.8.5"
+clap = { workspace = true, features = ["derive"] }
+secp256k1 = { workspace = true, features = ["global-context", "recovery"] }
+
+
+[dev-dependencies]
+sov-eth-client = { workspace = true }
+sov-address = { workspace = true, features = ["native", "arbitrary"] }
+sov-risc0-adapter = { workspace = true, features = ["native", "arbitrary"] }
+sov-celestia-adapter = { workspace = true, features = ["native", "arbitrary"] }
+sov-mock-zkvm = { workspace = true, features = ["native", "arbitrary"] }
+sov-rollup-interface = { workspace = true, features = ["arbitrary"] }
+sov-modules-api = { workspace = true, features = ["native", "arbitrary", "test-utils"] }
+sov-mock-da = { workspace = true, features = ["arbitrary"] }
+sov-bank = { workspace = true, features = ["native"] }
+sov-sequencer-registry = { workspace = true, features = ["native"] }
+sov-accounts = { workspace = true, features = ["native"] }
+sov-api-spec = { workspace = true }
+sov-modules-macros = { workspace = true }
+sov-test-utils = { workspace = true }
+sov-chain-state = { workspace = true }
+sov-blob-storage = { workspace = true }
+sov-value-setter = { workspace = true, features = ["native"] }
+reth-primitives = { git = "https://github.com/paradigmxyz/reth", rev = "ea25df7ed3b02c951c1d6ed49cee1ba40728f3f9", default-features = false }
+futures = "0.3"
+demo-stf-json-client = { path = "./stf/demo-stf-json-client", default-features = false }
+
+hex = "0.4.3"
+sha2 = "0.10.8"
+tempfile = "3.12"
+proptest = { version = "1.5", features = ["alloc"] }
+tokio = { version = "1.42", features = ["full"] }
+tracing-subscriber = "0.3.18"
+rand = "0.8"
+
+ethereum-types = "0.14.1"
+ethers-core = { version = "=2.0.14", default-features = false }
+ethers-contract = { version = "=2.0.14", default-features = false }
+ethers-providers = { version = "=2.0.14", default-features = false }
+ethers-signers = { version = "=2.0.14", default-features = false }
+ethers-middleware = { version = "=2.0.14", default-features = false }
+
+reqwest = { version = "0.12", features = ["rustls-tls"], default-features = false }
+prettytable-rs = "0.10"
+criterion = "0.5.1"
+
+[build-dependencies]
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
+borsh = { workspace = true }
+sov-universal-wallet = { workspace = true, features = ["serde"] }
+sov-modules-api = { workspace = true }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+sov-mock-da = { workspace = true, features = ["native"] }
+demo-stf = { workspace = true, features = ["native"] }
+sov-address = { workspace = true, features = ["evm"] }
+sov-state = { workspace = true, features = ["native"] }
+
+[features]
+default = []
+# Used for using different encoding between host and guest
+bincode = ["risc0/bincode", "sov-risc0-adapter/bincode"]
+
+[[bin]]
+name = "sov-cli"
+path = "src/sov-cli/main.rs"
+
+[[bin]]
+name = "sov-demo-rollup"
+path = "src/main.rs"
+
+
+[[bin]]
+name = "demo-celestia-tester"
+path = "src/da_tester/demo_celestia_tester.rs"

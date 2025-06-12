@@ -1,0 +1,43 @@
+[package]
+name = "svm-engine"
+version = { workspace = true }
+edition = { workspace = true }
+publish = false
+
+[dependencies]
+# External dependencies from crates.io
+bincode = { workspace = true }
+bon = { workspace = true }
+eyre = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+
+# Solana & Agave
+solana-bpf-loader-program = { workspace = true }
+solana-compute-budget = { workspace = true }
+solana-compute-budget-program = { workspace = true }
+solana-program = { workspace = true }
+solana-program-runtime = { workspace = true }
+solana-sdk = { workspace = true }
+solana-svm = { workspace = true }
+solana-system-program = { workspace = true }
+solana-transaction-status = { workspace = true }
+solana-vote = { workspace = true }
+
+spl-token-2022 = { workspace = true, optional = true }
+spl-associated-token-account = { workspace = true, optional = true }
+
+# Locals
+svm-test-utils = { workspace = true }
+
+[dev-dependencies]
+# Solana & Agave
+solana-logger = { workspace = true }
+solana-sdk = { workspace = true, features = ["dev-context-only-utils"] }
+
+spl-token-2022 = { workspace = true }
+spl-associated-token-account = { workspace = true }
+
+[features]
+default = []
+test-utils = [ "dep:spl-associated-token-account", "dep:spl-token-2022" ]

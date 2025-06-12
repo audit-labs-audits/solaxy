@@ -1,0 +1,146 @@
+[package]
+name = "svm"
+authors = { workspace = true }
+edition = { workspace = true }
+homepage = { workspace = true }
+license-file = { workspace = true }
+repository = { workspace = true }
+version = { workspace = true }
+readme = "README.md"
+publish = false
+resolver = "2"
+
+[lints]
+workspace = true
+
+[dependencies]
+# External dependencies from crates.io
+anyhow = { workspace = true }
+base64 = { workspace = true }
+bincode = { workspace = true }
+borsh = { workspace = true, features = ["rc"] }
+chrono = { workspace = true }
+eyre = { workspace = true }
+itertools = { workspace = true, optional = true }
+jsonrpsee = { workspace = true, features = [
+	"macros",
+	"client-core",
+	"server",
+], optional = true }
+schemars = { workspace = true }
+serde = { workspace = true }
+serde-big-array = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true, optional = true }
+
+# Sovereign dependencies
+sov-address = { workspace = true }
+sov-bank = { workspace = true }
+# EVM feature is on because of unmetered state access for the SVM.
+sov-modules-api = { workspace = true, features = ["evm"] }
+sov-modules-stf-blueprint = { workspace = true }
+sov-mock-da = { workspace = true, optional = true }
+sov-rollup-interface = { workspace = true }
+sov-sequencer = { workspace = true, optional = true }
+sov-state = { workspace = true }
+sov-test-utils = { workspace = true, optional = true }
+
+# Needed for Sovereign derive macros
+strum = { workspace = true }
+
+# Solana & Agave
+solana-account-decoder = { workspace = true, optional = true }
+solana-accounts-db = { workspace = true }
+solana-compute-budget = { workspace = true }
+solana-program = { workspace = true }
+solana-program-runtime = { workspace = true, optional = true }
+solana-rpc-client-api = { workspace = true, optional = true }
+solana-sdk = { workspace = true }
+solana-svm = { workspace = true }
+solana-transaction-status = { workspace = true, optional = true }
+
+spl-associated-token-account = { workspace = true }
+spl-token = { workspace = true }
+spl-token-2022 = { workspace = true }
+
+# Locals
+svm-types = { workspace = true }
+svm-engine = { workspace = true }
+
+[dev-dependencies]
+# External dependencies from crates.io
+tempfile = { workspace = true }
+serde_json = { workspace = true }
+
+# Sovereign dependencies
+sov-accounts = { workspace = true }
+sov-attester-incentives = { workspace = true }
+sov-bank = { workspace = true }
+sov-blob-storage = { workspace = true }
+sov-chain-state = { workspace = true }
+sov-kernels = { workspace = true }
+sov-mock-da = { workspace = true }
+sov-prover-incentives = { workspace = true }
+sov-rollup-interface = { workspace = true }
+sov-sequencer-registry = { workspace = true }
+sov-test-utils = { workspace = true }
+
+# Solana dependencies
+solana-logger = { workspace = true }
+
+# Locals
+svm = { workspace = true, features = ["dev"] }
+svm-types = { workspace = true, features = ["dev"] }
+
+[features]
+default = []
+dev = [ "arbitrary", "native", "test-utils" ]
+arbitrary = [
+	"chrono/arbitrary",
+	"sov-accounts/arbitrary",
+	"sov-address/arbitrary",
+	"sov-bank/arbitrary",
+	"sov-mock-da/arbitrary",
+	"sov-modules-api/arbitrary",
+	"sov-rollup-interface/arbitrary",
+	"sov-sequencer-registry/arbitrary",
+	"sov-state/arbitrary",
+	"sov-test-utils/arbitrary",
+	"svm-types/arbitrary",
+	"svm/arbitrary",
+]
+native = [
+	"dep:itertools",
+	"dep:jsonrpsee",
+	"dep:solana-account-decoder",
+	"dep:solana-program-runtime",
+	"dep:solana-rpc-client-api",
+	"dep:solana-transaction-status",
+	"dep:sov-sequencer",
+	"dep:tracing",
+	"sov-accounts/native",
+	"sov-address/native",
+	"sov-attester-incentives/native",
+	"sov-bank/native",
+	"sov-blob-storage/native",
+	"sov-chain-state/native",
+	"sov-kernels/native",
+	"sov-mock-da/native",
+	"sov-modules-api/native",
+	"sov-modules-stf-blueprint/native",
+	"sov-prover-incentives/native",
+	"sov-rollup-interface/native",
+	"sov-sequencer-registry/native",
+	"sov-state/native",
+	"svm-types/native",
+	"svm/native",
+]
+test-utils = [
+	"dep:sov-mock-da",
+	"dep:sov-test-utils",
+	"sov-modules-api/test-utils",
+	"svm-types/test-utils",
+]
+
+[package.metadata.cargo-machete]
+ignored = ["strum"]

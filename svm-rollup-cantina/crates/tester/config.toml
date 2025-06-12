@@ -1,0 +1,14 @@
+# RPC and REST addresses to connect a client to a rollup node
+[rpc]
+http_addr = "0.0.0.0:8899"
+
+# Keypair filenames for accounts initialized in SVM
+# Keypairs are stored in ../test-data/genesis/demo/mock/keypairs/
+[accounts]
+keypairs = [
+    "2MCVmcuUcREwQKDS3HazuYctkkbZV3XRMspM5eLWRZUV-keypair.json",
+    "5DfYZe6XMXv41JhG7qhTozezi6iSCZVPr5ThzF2ttnkX-keypair.json",
+    "AWY6tRyv51T2Yg5PakFMoxJZVztKYrBkhofpSWqHkBSV-keypair.json",
+    "CY2DzeUH4VmRshuYbcu9FYdHx1CNn8TAwe4bxsGAuLUA-keypair.json",
+    "Efv3GQYK4ccv4V51R8qVuPBkER1m5MaY15uKV8m7MUq4-keypair.json",
+]

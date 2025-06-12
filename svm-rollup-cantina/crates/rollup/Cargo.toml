@@ -1,0 +1,128 @@
+[package]
+name = "svm-rollup"
+version = { workspace = true }
+edition = { workspace = true }
+authors = { workspace = true }
+license-file = { workspace = true }
+homepage = { workspace = true }
+publish = false
+resolver = "2"
+default-run = "svm-rollup"
+
+[lints]
+workspace = true
+
+[dependencies]
+# External dependencies from crates.io
+async-trait = { workspace = true }
+anyhow = { workspace = true }
+backon = { workspace = true }
+borsh = { workspace = true, features = ["bytes"] }
+clap = { workspace = true }
+jsonrpsee = { workspace = true, features = ["full"] }
+hex = { workspace = true, optional = true }
+prometheus_exporter = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true, features = [
+	"rt-multi-thread",
+	"sync",
+	"time",
+	"macros",
+] }
+tower = { workspace = true }
+
+# Sovereign dependencies
+sov-address = { workspace = true }
+sov-bank = { workspace = true }
+sov-blob-storage = { workspace = true }
+sov-celestia-adapter = { workspace = true, features = ["native", "arbitrary"] }
+sov-cli = { workspace = true }
+sov-db = { workspace = true }
+sov-mock-da = { workspace = true, features = ["native", "arbitrary"] }
+sov-mock-zkvm = { workspace = true, features = ["native"] }
+sov-modules-api = { workspace = true, features = ["native", "arbitrary"] }
+sov-modules-rollup-blueprint = { workspace = true }
+sov-modules-stf-blueprint = { workspace = true, features = ["native"] }
+sov-rollup-interface = { workspace = true, features = ["native"] }
+sov-sequencer = { workspace = true }
+sov-sp1-adapter = { workspace = true, features = ["native"] }
+sov-state = { workspace = true, features = ["native"] }
+sov-stf-runner = { workspace = true }
+
+# Solana & Agave
+solana-program = { workspace = true }
+solana-sdk = { workspace = true }
+solana-cli-config = { workspace = true }
+solana-client = { workspace = true }
+
+# Locals
+solana-da = { workspace = true, features = ["native"] }
+svm = { workspace = true, features = ["native"] }
+svm-types = { workspace = true, features = ["native", "arbitrary"] }
+stf = { workspace = true, features = ["native"] }
+sp1 = { workspace = true }
+
+# Nitro dependencies
+nitro-da-client = { workspace = true }
+blober = { workspace = true }
+
+[dev-dependencies]
+# External dependencies from crates.io
+bincode = { workspace = true }
+hex = { workspace = true }
+humantime = { workspace = true }
+tempfile = { workspace = true }
+tokio = { workspace = true, features = ["full"] }
+
+# Sovereign dependencies
+sov-bank = { workspace = true, features = ["native"] }
+sov-mock-da = { workspace = true }
+sov-modules-macros = { workspace = true }
+sov-rollup-interface = { workspace = true, features = ["arbitrary"] }
+sov-test-utils = { workspace = true }
+
+# Solana & Agave
+solana-account-decoder = { workspace = true }
+solana-rpc-client-api = { workspace = true }
+solana-transaction-status = { workspace = true }
+
+# Locals
+svm = { workspace = true, features = ["dev"] }
+svm-types = { workspace = true, features = ["dev"] }
+svm-rollup = { workspace = true, features = ["bench"] }
+
+[build-dependencies]
+# External dependencies from crates.io
+serde_json = { workspace = true }
+
+# Sovereign dependencies
+sov-mock-da = { workspace = true, features = ["native"] }
+sov-modules-api = { workspace = true }
+
+# Locals
+stf = { workspace = true, features = ["native"] }
+svm-types = { workspace = true, features = ["native", "test-utils"] }
+
+[features]
+default = []
+bench = [
+	"dep:hex",
+	"sov-celestia-adapter/bench",
+	"sov-modules-api/bench",
+	"sov-modules-macros/bench",
+	"sov-modules-stf-blueprint/bench",
+	"sov-sp1-adapter/bench",
+	"sov-state/bench",
+	"sp1/bench",
+	"svm-rollup/bench",
+	"svm-types/test-utils",
+]
+
+[[bin]]
+name = "sov-cli"
+path = "src/sov-cli/main.rs"
+
+[[bin]]
+name = "svm-rollup"
+path = "src/main.rs"

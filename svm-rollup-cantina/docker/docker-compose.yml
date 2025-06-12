@@ -1,0 +1,98 @@
+services:
+  celestia-validator:
+    container_name: celestia-validator
+    image: validator
+    hostname: validator
+    profiles:
+      - celestia
+    build:
+      context: .
+      dockerfile: Dockerfile.validator
+    healthcheck:
+      # To see healthcheck output:
+      # docker inspect --format "{{json .State.Health }}" docker-validator-1 | jq
+      test: ["CMD", "/opt/validator-healthcheck.sh"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    # uncomment to provide amount of sequencers to provision (default: 1)
+    # command: [ "/opt/entrypoint.sh", "2" ]
+    volumes:
+      - type: bind
+        source: ./credentials
+        target: /credentials
+      - genesis:/genesis
+    networks:
+      - monitoring-network
+
+  celestia-sequencer:
+    container_name: celestia-sequencer
+    image: bridge
+    hostname: sequencer
+    profiles:
+      - celestia
+    build:
+      context: .
+      dockerfile: Dockerfile.bridge
+    depends_on:
+      - celestia-validator
+    healthcheck:
+      # To see healthcheck output:
+      test: ["CMD", "/opt/bridge-healthcheck.sh", "/credentials/bridge-0.jwt"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 10s
+    ports:
+      - 26658:26658
+    volumes:
+      - type: bind
+        source: ./credentials
+        target: /credentials
+        consistency: consistent
+      - genesis:/genesis
+    networks:
+      - monitoring-network
+
+  solana-indexer:
+    container_name: solana-indexer
+    image: solana-indexer
+    hostname: solana-indexer
+    profiles:
+      - solana
+    ports:
+      # Solana RPC
+      - "1024:1024/tcp"
+      - "8999:8899"
+      # Solana WS
+      - "9000:8900"
+      # Indexer RPC
+      - "9696:9696"
+      # Solana TPU/QUIC
+      - "1024-1037:1024-1037/udp"
+      - "8000:8000/udp"
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.solana-indexer
+    healthcheck:
+      test: 'curl --fail http://localhost:8899/ -H ''Content-Type: application/json'' -d''{"jsonrpc":"2.0","id":1, "method":"getHealth"}'' || exit 1'
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - genesis:/genesis
+    networks:
+      - monitoring-network
+
+volumes:
+  # a temporary fs where the genesis hash is announced
+  genesis:
+    driver_opts:
+      type: tmpfs
+      device: tmpfs
+
+networks:
+  monitoring-network:
+    driver: bridge

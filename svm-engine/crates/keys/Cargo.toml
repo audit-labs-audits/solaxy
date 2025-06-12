@@ -1,0 +1,25 @@
+[package]
+name = "svm-engine-keys"
+description = "Custom serde implementations for Solana Keypair and Pubkey structs"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish = true
+
+[dependencies]
+# External dependencies from crates.io
+serde = { workspace = true }
+
+# Solana & Agave
+solana-sdk = { workspace = true }
+
+[dev-dependencies]
+# External dependencies from crates.io
+serde_json = { workspace = true }
+
+# Locals
+svm-engine-keys = { workspace = true, features = ["keypair"] }
+
+[features]
+default = []
+keypair = []

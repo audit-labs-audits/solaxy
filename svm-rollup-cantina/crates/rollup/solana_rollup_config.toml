@@ -1,0 +1,51 @@
+[da]
+indexer_url = "ws://localhost:9696"
+priority = "Medium"
+program_id = "CdczmTavZ6HQwSvEgKJtyrQzKYV4MyU6EZ4Gz5KsULoP"
+
+[storage]
+# The path to the rollup's data directory. Paths that do not begin with `/` are interpreted as relative paths.
+path = "demo_data"
+
+# We define the rollup's genesis to occur at block number `genesis_height`. The rollup will ignore
+# any blocks before this height, and any blobs at this height will not be processed
+[runner]
+genesis_height = 3
+# da.block_time is ~400ms, so status updater will try to poll it 3 times during it.
+da_polling_interval_ms = 130
+
+[runner.http_config]
+# the host and port to bind the rpc and axum server for
+bind_host = "0.0.0.0"
+bind_port = 8899
+# In case the rollup is running behind a proxy
+# public_address = "http://rollup.sovereign.xyz"
+
+[monitoring]
+telegraf_address = "127.0.0.1:8094"
+# Defines how many measurements a rollup node will accumulate before sending it to the Telegraf.
+# It is expected from the rollup node to produce metrics all the time,
+# so measurements are buffered by size and not sent by time.
+# and below 67 KB, which is the maximal UDP packet size.
+# It also means that if a single serialized metric is larger than this value, a UDP packet will be larger.
+# The default value is 508.
+# max_datagram_size = 508
+# How many metrics are allowed to be in pending state, before new metrics will be dropped.
+# This is a number of metrics, not serialized bytes.
+# The total number of bytes to be held in memory might vary per metric + `max_datagram_size`
+# max_pending_metrics = 100
+
+[proof_manager]
+aggregated_proof_block_jump = 1
+prover_address = "HjjEhif8MU9DtnXtZc5hkBu9XLAkAYe1qwzhDoxbcECv"
+max_number_of_transitions_in_db = 100
+max_number_of_transitions_in_memory = 30
+
+[sequencer]
+max_allowed_blocks_behind = 5
+da_address = "2MCVmcuUcREwQKDS3HazuYctkkbZV3XRMspM5eLWRZUV"
+rollup_address = "HjjEhif8MU9DtnXtZc5hkBu9XLAkAYe1qwzhDoxbcECv"
+automatic_batch_production = true
+max_allowed_node_distance_behind = 5
+
+[sequencer.preferred]

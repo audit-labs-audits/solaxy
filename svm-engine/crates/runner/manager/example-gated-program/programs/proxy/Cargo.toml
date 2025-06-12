@@ -1,0 +1,25 @@
+[package]
+name = "proxy"
+version = "0.1.1"
+description = "Created with Anchor"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "proxy"
+
+[features]
+default = []
+cpi = [ "no-entrypoint" ]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+idl-build = [ "anchor-lang/idl-build" ]
+
+
+[dependencies]
+# External dependencies from crates.io
+bincode = { workspace = true }
+
+# Solana & Agave
+anchor-lang = { workspace = true, features = ["init-if-needed"] }

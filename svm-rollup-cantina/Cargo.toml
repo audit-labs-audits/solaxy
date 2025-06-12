@@ -1,0 +1,191 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/benches",
+    "crates/const-rollup-config",
+    "crates/rollup",
+    "crates/stf",
+    "crates/tester",
+    "crates/svm",
+    "crates/svm-types",
+    "crates/solana-da",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license-file = "LICENSE"
+authors = [
+    "Nitro Labs <team@nitro.technology>",
+    "Sovereign Labs <info@sovereign.xyz>",
+]
+homepage = "https://www.termina.technology"
+publish = false
+repository = "https://github.com/nitro-svm/svm-rollup"
+
+[workspace.lints.rust]
+dead_code = "deny"
+non_ascii_idents = "deny" # Bad for readability and it can also be a security vulnerability
+
+# In case you need inspiration for new lints to add to the list, this is a good
+# reference: <https://github.com/EmbarkStudios/rust-ecosystem/blob/6783ae1573d62f3f5439b8ff9e04bec191ec2eaf/lints.toml>.
+[workspace.lints.clippy]
+debug_assert_with_mut_call = "deny"
+inefficient_to_string = "deny"
+map_flatten = "deny"
+manual_ok_or = "deny"
+doc_link_with_quotes = "deny"
+match_same_arms = "deny"
+semicolon_if_nothing_returned = "deny"
+#map_err_ignore = "warn"
+#doc_markdown = "warn"
+
+[workspace.dependencies]
+# External dependencies from crates.io
+anyhow = "1.0.95"
+arbitrary = { version = "1.3.1", features = ["derive"] }
+async-trait = "0.1.71"
+backon = "0.4.4"
+base64 = "0.22.1"
+bon = "3.3.1"
+borsh = { version = "1.5.7", default-features = false }
+# Only used for transaction serialization, no state storing
+bincode = "1.3.3"
+bytes = { version = "1.2", default-features = false, features = ["serde"] }
+chrono = { version = "0.4.37", default-features = false }
+clap = { version = "4.4.10", features = ["derive", "string"] }
+criterion = "0.5.1"
+derivative = { version = "2.2", features = ["use_core"] }
+derive_more = { version = "1.0", default-features = false, features = ["std"] }
+env_logger = "0.9.3"
+eyre = "0.6.12"
+futures = { version = "0.3", default-features = false }
+hex = { version = "0.4.3", default-features = false }
+humantime = "2.1"
+itertools = "0.14.0"
+jsonrpsee = { version = "0.24", features = ["macros", "server-core"] }
+jsonschema = "0.27.0"
+lazy_static = "1.4"
+prettytable-rs = "^0.10"
+progenitor = { version = "0.8" }
+prometheus_exporter = "0.8.5"
+proptest = { version = "1.5", default-features = false, features = ["alloc"] }
+proptest-derive = "0.5.0"
+# Has to be 0.7 for Solana SDK compatibility
+rand = "0.7"
+reqwest = { version = "0.12", features = [
+    "rustls-tls",
+    "stream",
+], default-features = false }
+schemars = { version = "0.8.16" }
+serde = { version = "1.0.213", default-features = false }
+serde-big-array = "0.5"
+serde_json = { version = "1.0", default-features = false }
+sha2 = { version = "0.10.8", default-features = false }
+strum = { version = "0.26", features = ["derive"] }
+tempfile = "3.8"
+thiserror = "2.0.9"
+tokio = { version = "1.35", default-features = false }
+toml = "0.5.11"
+tower = "0.5.2"
+tracing = { version = "0.1.40", default-features = false }
+
+# Sovereign dependencies
+sov-accounts = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-address = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-attester-incentives = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-bank = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-blob-storage = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-celestia-adapter = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-chain-state = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-cli = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-db = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-kernels = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-metrics = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-mock-da = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-mock-zkvm = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-modules-api = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-modules-macros = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-modules-rollup-blueprint = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-modules-stf-blueprint = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-prover-incentives = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-rollup-apis = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-rollup-interface = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-sequencer = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-sequencer-registry = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-sp1-adapter = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-state = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-stf-runner = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-test-utils = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+sov-transaction-generator = { git = "https://github.com/nitro-svm/sovereign-sdk-wip", rev = "3ff42425499772af024679fd3244b3e2a95b626f" }
+
+# Solana & Agave
+solana-account-decoder = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-accounts-db = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-cli-config = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-client = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-compute-budget = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-logger = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-program-runtime = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-rpc-client = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-rpc-client-api = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-runtime = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-sdk = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-svm = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-transaction-status = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+
+anchor-lang = { git = "https://github.com/coral-xyz/anchor", rev = "db6da5c67d896e0a94c158f69e9b235e364b3064" }
+
+spl-associated-token-account = "4.0.0"
+spl-token = "6.0.0"
+spl-token-2022 = "4.0.0"
+
+# Nitro dependencies
+svm-engine = { git = "https://github.com/nitro-svm/svm-engine", rev = "a7f2d410b03435749c23a006c251e9c9279183b3" }
+svm-engine-keys = { git = "https://github.com/nitro-svm/svm-engine", rev = "a7f2d410b03435749c23a006c251e9c9279183b3" }
+
+blober = { git = "https://github.com/nitro-svm/nitro-data-module", rev = "8436da42579b0566aa9129507af043a6410eb00e" }
+nitro-da-client = { git = "https://github.com/nitro-svm/nitro-data-module", rev = "8436da42579b0566aa9129507af043a6410eb00e" }
+nitro-da-indexer-api = { git = "https://github.com/nitro-svm/nitro-data-module", rev = "8436da42579b0566aa9129507af043a6410eb00e" }
+nitro-da-proofs = { git = "https://github.com/nitro-svm/nitro-data-module", rev = "8436da42579b0566aa9129507af043a6410eb00e" }
+
+# Locals
+const-rollup-config = { path = "crates/const-rollup-config" }
+solana-da = { path = "crates/solana-da" }
+sp1 = { path = "crates/provers/sp1" }
+stf = { path = "crates/stf" }
+svm = { path = "crates/svm" }
+svm-rollup = { path = "crates/rollup" }
+svm-types = { path = "crates/svm-types" }
+
+# Patches are also required in the provers since they're separate workspaces
+[patch.crates-io]
+# Solana
+# Patches from Agave's Cargo.toml
+# They explain the need for the patched here: https://github.com/anza-xyz/agave/blob/8c5a33a81a0504fd25d0465bed35d153ff84819f/Cargo.toml#L479
+curve25519-dalek = { git = "https://github.com/solana-labs/curve25519-dalek", rev = "b500cdc2a920cd5bff9e2dd974d7b97349d61464" }
+solana-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-zk-token-sdk = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+# Patches for nitro-data-module
+solana-account-decoder = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-accounts-db = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-bpf-loader-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-cli-config = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-client = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-compute-budget = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-connection-cache = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-measure = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-program-runtime = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-quic-client = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-rpc-client = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-rpc-client-api = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-sdk = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-svm = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-thin-client = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-transaction-status = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+# Patches for svm-engine
+solana-compute-budget-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-logger = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-system-program = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
+solana-vote = { git = "https://github.com/nitro-svm/agave", branch = "feat/sp1" }
