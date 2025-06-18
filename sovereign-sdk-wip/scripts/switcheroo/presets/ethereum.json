@@ -1,5 +1,0 @@
-[
-	"crates/full-node/sov-ethereum",
-	"crates/full-node/sov-eth-dev-signer",
-	"crates/module-system/module-implementations/sov-evm"
-]

@@ -1,5 +1,0 @@
-[
-	"crates/utils/transaction-generator",
-	"crates/module-system/module-schemas",
-	"crates/utils/rest-api-load-testing"
-]
