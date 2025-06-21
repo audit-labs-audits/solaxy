@@ -209,12 +209,12 @@
     },
     {
       "type": "highlight",
-      "description": "pub trait `SVMStorage`: `TransactionProcessingCallback` { fn `get_account`(`...`); fn `set_account`(`...`); fn `remove_account`(`...`); fn `get_owner_index`(`...`); fn `set_owner_index`(`...`); } — **core persistence API.**",
+      "description": "The `SVMStorage` trait defines the core persistence API. Its key methods handle:\n\n* **Account state**: `get_account`, `set_account`, and `remove_account`.\n* **Ownership indexing**: `get_owner_index` and `set_owner_index`.",
       "file": "svm-engine/crates/engine/src/storage.rs",
       "highlight": [
         {
-          "start": 35,
-          "end": 45
+          "start": 36,
+          "end": 51
         }
       ],
       "title": "",
