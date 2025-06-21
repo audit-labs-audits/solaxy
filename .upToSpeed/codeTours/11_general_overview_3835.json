@@ -1,0 +1,170 @@
+{
+  "title": "1.1: General Overview",
+  "id": "2wXbUPGGvHfka54sS89B6RBaqr0JJFL+zByUF7PQAoE=",
+  "originalId": 3835,
+  "position": 1,
+  "steps": [
+    {
+      "type": "highlight",
+      "description": "The root-level README declares this as the `svm-monorepo`. The two main subprojects, `svm-engine` and `svm-rollup-cantina`, live alongside this file.",
+      "file": "README.md",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 3
+        }
+      ],
+      "title": "",
+      "id": "45412"
+    },
+    {
+      "type": "highlight",
+      "description": "In `svm-engine/README.md`, the standalone VM is described: it runs Solana transactions outside a blockchain with built-in `SPL` support and exposes JSON-RPC endpoints for account queries and transaction submission.",
+      "file": "svm-engine/README.md",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 4
+        }
+      ],
+      "title": "",
+      "id": "45413"
+    },
+    {
+      "type": "highlight",
+      "description": "The `svm-rollup-cantina` `README` explains this crate implements a full rollup on top of the `SVM engine` using the `Sovereign SDK`, integrating a Data Availability layer, an STF runtime, and ZK proofs.",
+      "file": "svm-rollup-cantina/README.md",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 4
+        }
+      ],
+      "title": "",
+      "id": "45414"
+    },
+    {
+      "type": "highlight",
+      "description": "The `Engine<'a, Storage>` struct is the heart of the execution core. It composes the storage backend (`db`), a transaction `processor`, a `fork_graph` to track bank forks, and a `config` for execution parameters.",
+      "file": "svm-engine/crates/engine/src/lib.rs",
+      "highlight": [
+        {
+          "start": 71,
+          "end": 78
+        }
+      ],
+      "title": "",
+      "id": "45415"
+    },
+    {
+      "type": "highlight",
+      "description": "The `main` function in `rpc/src/main.rs` sets up an **API key middleware** and starts a JSON-RPC server on port 8080 by calling `svm.into_rpc()`.",
+      "file": "svm-engine/crates/rpc/src/main.rs",
+      "highlight": [
+        {
+          "start": 60,
+          "end": 68
+        }
+      ],
+      "title": "",
+      "id": "45416"
+    },
+    {
+      "type": "highlight",
+      "description": "The `#[rpc]` trait declares methods `getAccountInfo` and `sendTransaction`. The `Svm` struct wraps an `Engine` instance and implements this trait to dispatch calls to the execution core.",
+      "file": "svm-engine/crates/rpc/src/rpc.rs",
+      "highlight": [
+        {
+          "start": 50,
+          "end": 57
+        }
+      ],
+      "title": "",
+      "id": "45417"
+    },
+    {
+      "type": "highlight",
+      "description": "The `rollup` crate entrypoint declares its submodules: `da` for data availability integration, `celestia_rollup`, `mock_rollup`, and `solana_rollup` as rollup blueprints, and `zk` for proof handling.",
+      "file": "svm-rollup-cantina/crates/rollup/src/lib.rs",
+      "highlight": [
+        {
+          "start": 1,
+          "end": 7
+        }
+      ],
+      "title": "",
+      "id": "45418"
+    },
+    {
+      "type": "highlight",
+      "description": "In the `solana-da` crate, the `DaService` implementation for `SolanaService` defines `get_block_at(height)`. It fetches a block via RPC and concurrently retrieves batch and proof data, assembling a `FilteredBlock`.",
+      "file": "svm-rollup-cantina/crates/solana-da/src/native/service/da.rs",
+      "highlight": [
+        {
+          "start": 17,
+          "end": 24
+        }
+      ],
+      "title": "",
+      "id": "45419"
+    },
+    {
+      "type": "highlight",
+      "description": "The `SVM` struct annotated with `#[derive(ModuleInfo)]` implements a `Sovereign SDK` module that encapsulates VM state: accounts, bank module, owner index, blockhash queue, compute budget, and more.",
+      "file": "svm-rollup-cantina/crates/svm/src/lib.rs",
+      "highlight": [
+        {
+          "start": 61,
+          "end": 69
+        }
+      ],
+      "title": "",
+      "id": "45420"
+    },
+    {
+      "type": "highlight",
+      "description": "The `Runtime` struct, derived with `Genesis`, `DispatchCall`, and `MessageCodec`, wires together modules (`Bank`, `SequencerRegistry`, etc.) and the `svm` module into the state transition function.",
+      "file": "svm-rollup-cantina/crates/stf/src/runtime/mod.rs",
+      "highlight": [
+        {
+          "start": 55,
+          "end": 63
+        }
+      ],
+      "title": "",
+      "id": "45421"
+    },
+    {
+      "type": "highlight",
+      "description": "The `load_elf` helper reads a guest ELF file from disk into a `OnceLock<Vec<u8>>`, warning if it's missing, to prepare ZK guests for proof generation.",
+      "file": "svm-rollup-cantina/crates/provers/sp1/src/lib.rs",
+      "highlight": [
+        {
+          "start": 7,
+          "end": 15
+        }
+      ],
+      "title": "",
+      "id": "45422"
+    },
+    {
+      "type": "highlight",
+      "description": "The `lazy_static!` declarations `SP1_GUEST_*_ELF` call `load_elf` to load the compiled ELF for **mock**, **Celestia**, and **Solana** guest programs at startup.",
+      "file": "svm-rollup-cantina/crates/provers/sp1/src/lib.rs",
+      "highlight": [
+        {
+          "start": 28,
+          "end": 32
+        }
+      ],
+      "title": "",
+      "id": "45423"
+    },
+    {
+      "type": "textOnly",
+      "description": "**Wrap-up:** You now know where each major component lives and how they interact:\n\n* The `svm-engine` directory contains the standalone execution core and its JSON-RPC layer\n* The `svm-rollup-cantina` directory builds a full rollup: it integrates Solana data availability (`solana-da`), the STF runtime (`stf`), the SVM module bridging VM state, and a ZK prover loader (`provers/sp1`)\n\n**High-level flow:** user → DA service → STF runtime → SVM module → execution engine → ZK prover → DA layer\n\nNext tours will deep dive into each of these crates.",
+      "title": "",
+      "id": "45424"
+    }
+  ]
+}

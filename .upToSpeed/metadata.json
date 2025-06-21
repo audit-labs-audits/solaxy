@@ -1,0 +1,33 @@
+{
+  "packageName": "solaxy",
+  "packageVersion": 1,
+  "hash": "bc4151e723d8c64036e0684da16ba23a8f576718",
+  "numberOfTours": 4,
+  "titleOfTours": [
+    "1.1: General Overview",
+    "2.1: svm-engine-core: Overview",
+    "3.1: svm-engine-rpc: Overview",
+    "3.2: svm-engine-rpc: Server Setup and Startup"
+  ],
+  "totalNumberOfSteps": 52,
+  "filesCovered": [
+    "README.md",
+    "svm-engine/README.md",
+    "svm-rollup-cantina/README.md",
+    "svm-engine/crates/engine/src/lib.rs",
+    "svm-engine/crates/rpc/src/main.rs",
+    "svm-engine/crates/rpc/src/rpc.rs",
+    "svm-rollup-cantina/crates/rollup/src/lib.rs",
+    "svm-rollup-cantina/crates/solana-da/src/native/service/da.rs",
+    "svm-rollup-cantina/crates/svm/src/lib.rs",
+    "svm-rollup-cantina/crates/stf/src/runtime/mod.rs",
+    "svm-rollup-cantina/crates/provers/sp1/src/lib.rs",
+    "svm-engine/crates/engine/src/builtins.rs",
+    "svm-engine/crates/engine/src/execution.rs",
+    "svm-engine/crates/engine/src/processor.rs",
+    "svm-engine/crates/engine/src/programs.rs",
+    "svm-engine/crates/engine/src/storage.rs",
+    "svm-engine/crates/engine/src/verification.rs"
+  ],
+  "numberOfFilesCovered": 17
+}

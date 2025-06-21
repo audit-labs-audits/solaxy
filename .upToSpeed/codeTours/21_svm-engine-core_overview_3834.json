@@ -1,0 +1,265 @@
+{
+  "title": "2.1: svm-engine-core: Overview",
+  "id": "zGh9QYAJJ1llmE1w3bZO/tQaPKwjwCzO0iLLmN44hFQ=",
+  "originalId": 3834,
+  "position": 2,
+  "steps": [
+    {
+      "type": "textOnly",
+      "description": "High-level overview of the `svm-engine-core` crate, pointing you to each `file`’s key types and functions without diving into implementation details.",
+      "title": "",
+      "id": "45347"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/lib.rs"
+      ],
+      "description": "`lib.rs` is the crate entry point. It declares submodules and primary structs for configuring and running the engine.",
+      "title": "",
+      "id": "45348"
+    },
+    {
+      "type": "highlight",
+      "description": "`LoadAndExecuteTransactionsConfig` holds chain state, fee parameters, rent, and feature flags required to execute transactions.",
+      "file": "svm-engine/crates/engine/src/lib.rs",
+      "highlight": [
+        {
+          "start": 31,
+          "end": 42
+        }
+      ],
+      "title": "",
+      "id": "45349"
+    },
+    {
+      "type": "highlight",
+      "description": "`Engine` is the core execution object (built via a `Builder`), bundling storage (`db`), a batch processor (`processor`), fork graph, and execution config.",
+      "file": "svm-engine/crates/engine/src/lib.rs",
+      "highlight": [
+        {
+          "start": 71,
+          "end": 87
+        }
+      ],
+      "title": "",
+      "id": "45350"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/builtins.rs"
+      ],
+      "description": "`builtins.rs` defines the `Builtin` struct and the `BUILTINS` constant: programs always loaded into the runtime.",
+      "title": "",
+      "id": "45351"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub const BUILTINS: &[Builtin] = &[…];` lists system, BPF loader v2, upgradeable loader v3, and compute budget programs.",
+      "file": "svm-engine/crates/engine/src/builtins.rs",
+      "highlight": [
+        {
+          "start": 12,
+          "end": 17
+        }
+      ],
+      "title": "",
+      "id": "45352"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/execution.rs"
+      ],
+      "description": "`execution.rs` orchestrates transaction execution flows and error variants.",
+      "title": "",
+      "id": "45353"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub fn load_and_execute_transaction(&self, …)` – entry point for executing a single sanitized transaction.",
+      "file": "svm-engine/crates/engine/src/execution.rs",
+      "highlight": [
+        {
+          "start": 39,
+          "end": 43
+        }
+      ],
+      "title": "",
+      "id": "45354"
+    },
+    {
+      "type": "highlight",
+      "description": "`fn commit_transactions(&self, …)` – persists loaded accounts and execution results back to storage.",
+      "file": "svm-engine/crates/engine/src/execution.rs",
+      "highlight": [
+        {
+          "start": 55,
+          "end": 63
+        }
+      ],
+      "title": "",
+      "id": "45355"
+    },
+    {
+      "type": "highlight",
+      "description": "pub fn `load_execute_and_commit_transactions`(&self, `…`) – high-level loop: load, execute, commit, then `slot++`. ",
+      "file": "svm-engine/crates/engine/src/execution.rs",
+      "highlight": [
+        {
+          "start": 156,
+          "end": 164
+        }
+      ],
+      "title": "",
+      "id": "45356"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/processor.rs"
+      ],
+      "description": "`processor.rs` initializes sysvars, configures the program cache, and loads on-chain program bytecode.",
+      "title": "",
+      "id": "45357"
+    },
+    {
+      "type": "highlight",
+      "description": "This function seeds the storage with initial accounts for key system variables (sysvars) like `Rent`, `Clock`, `EpochSchedule`, and `EpochRewards`.",
+      "file": "svm-engine/crates/engine/src/processor.rs",
+      "highlight": [
+        {
+          "start": 29,
+          "end": 35
+        }
+      ],
+      "title": "",
+      "id": "45358"
+    },
+    {
+      "type": "highlight",
+      "description": "This method wires up the fork graph and runtime environment in the transaction processor.",
+      "file": "svm-engine/crates/engine/src/processor.rs",
+      "highlight": [
+        {
+          "start": 208,
+          "end": 211
+        }
+      ],
+      "title": "",
+      "id": "45359"
+    },
+    {
+      "type": "highlight",
+      "description": "This function adds the built-in programs and fills missing sysvar cache entries.",
+      "file": "svm-engine/crates/engine/src/processor.rs",
+      "highlight": [
+        {
+          "start": 224,
+          "end": 229
+        }
+      ],
+      "title": "",
+      "id": "45360"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/programs.rs"
+      ],
+      "description": "`programs.rs` defines embedded program metadata and a factory to install them into storage.",
+      "title": "",
+      "id": "45361"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub struct Program` { `program_id`: `Pubkey`, `owner_program`: `Pubkey`, `bytecode`: `&'static [u8]` } – metadata for each embedded program.",
+      "file": "svm-engine/crates/engine/src/programs.rs",
+      "highlight": [
+        {
+          "start": 12,
+          "end": 17
+        }
+      ],
+      "title": "",
+      "id": "45362"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub fn initialize_programs<Storage: SVMStorage>(db: &Storage, programs: &[Program]) -> eyre::Result<()>` – writes programs under v2/v3 loader semantics.",
+      "file": "svm-engine/crates/engine/src/programs.rs",
+      "highlight": [
+        {
+          "start": 31,
+          "end": 34
+        }
+      ],
+      "title": "",
+      "id": "45363"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/storage.rs"
+      ],
+      "description": "`storage.rs` abstracts on-chain state via the `SVMStorage` trait and provides an in-memory `AccountsDB`.",
+      "title": "",
+      "id": "45364"
+    },
+    {
+      "type": "highlight",
+      "description": "pub trait `SVMStorage`: `TransactionProcessingCallback` { fn `get_account`(`...`); fn `set_account`(`...`); fn `remove_account`(`...`); fn `get_owner_index`(`...`); fn `set_owner_index`(`...`); } — **core persistence API.**",
+      "file": "svm-engine/crates/engine/src/storage.rs",
+      "highlight": [
+        {
+          "start": 35,
+          "end": 45
+        }
+      ],
+      "title": "",
+      "id": "45365"
+    },
+    {
+      "type": "revealFiles",
+      "files": [
+        "svm-engine/crates/engine/src/verification.rs"
+      ],
+      "description": "`verification.rs` handles pre-flight transaction sanitization and age/fee checks.",
+      "title": "",
+      "id": "45366"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub fn sanitize_and_verify_tx(transaction: &Transaction, reserved_account_keys: &HashSet<Pubkey>) -> Result<SanitizedTransaction, TransactionError>` – signature and reserved keys check.",
+      "file": "svm-engine/crates/engine/src/verification.rs",
+      "highlight": [
+        {
+          "start": 8,
+          "end": 17
+        }
+      ],
+      "title": "",
+      "id": "45367"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub fn get_transaction_check_results(sanitized_tx: &[SanitizedTransaction], max_age: usize) -> Vec<transaction::Result<CheckedTransactionDetails>>` — produces pre-flight check results.",
+      "file": "svm-engine/crates/engine/src/verification.rs",
+      "highlight": [
+        {
+          "start": 34,
+          "end": 42
+        }
+      ],
+      "title": "",
+      "id": "45368"
+    },
+    {
+      "type": "textOnly",
+      "description": "That completes the high-level tour. You now know where to find core config types, execution entry points, initialization routines, program installation, storage abstractions, and verification utilities in `svm-engine-core`.",
+      "title": "",
+      "id": "45369"
+    }
+  ]
+}

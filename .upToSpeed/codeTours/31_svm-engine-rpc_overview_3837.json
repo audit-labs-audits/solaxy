@@ -1,0 +1,175 @@
+{
+  "title": "3.1: svm-engine-rpc: Overview",
+  "id": "JXb3DyJ7qPTpGXI95WLbNuzEEF5bsdfxjzSJyROO+RQ=",
+  "originalId": 3837,
+  "position": 9,
+  "steps": [
+    {
+      "type": "textOnly",
+      "description": "This `crate` starts an HTTP JSON-RPC server on port 8080 that exposes the `SVM engine`’s methods for account queries and transaction submission.",
+      "title": "",
+      "id": "45425"
+    },
+    {
+      "type": "textOnly",
+      "description": "Under `svm-engine/crates/rpc/src`, there are exactly two source files:\n- `main.rs` – binary entrypoint and server bootstrap\n- `rpc.rs` – JSON-RPC trait definition and its implementation over the SVM Engine",
+      "title": "",
+      "id": "45426"
+    },
+    {
+      "type": "highlight",
+      "description": "`main.rs` imports the RPC module, bringing in the `ApiKeyLayer`, generated `RpcServer` trait, and `Svm` type.",
+      "file": "svm-engine/crates/rpc/src/main.rs",
+      "highlight": [
+        {
+          "start": 19,
+          "end": 21
+        }
+      ],
+      "title": "",
+      "id": "45427"
+    },
+    {
+      "type": "highlight",
+      "description": "`set_up_environment` seeds genesis accounts into an `AccountsDB` and constructs `Svm::new(db, processor)` to initialize the engine.",
+      "file": "svm-engine/crates/rpc/src/main.rs",
+      "highlight": [
+        {
+          "start": 22,
+          "end": 30
+        }
+      ],
+      "title": "",
+      "id": "45428"
+    },
+    {
+      "type": "highlight",
+      "description": "A static `PROCESSOR` of type `TransactionBatchProcessor<SvmBankForks>` is lazily initialized to drive batched transaction processing.",
+      "file": "svm-engine/crates/rpc/src/main.rs",
+      "highlight": [
+        {
+          "start": 51,
+          "end": 58
+        }
+      ],
+      "title": "",
+      "id": "45429"
+    },
+    {
+      "type": "highlight",
+      "description": "`Svm::new` builds an `Engine` with the given storage backend and processor, initializes its cache and transaction processor, then wraps it in an `Arc` for concurrent use.",
+      "file": "svm-engine/crates/rpc/src/rpc.rs",
+      "highlight": [
+        {
+          "start": 63,
+          "end": 71
+        }
+      ],
+      "title": "",
+      "id": "45430"
+    },
+    {
+      "type": "highlight",
+      "description": "The `#[tokio::main] async fn main()` reads `API_KEY`, wraps the server in an API-key middleware, and binds the HTTP server to `0.0.0.0:8080`.",
+      "file": "svm-engine/crates/rpc/src/main.rs",
+      "highlight": [
+        {
+          "start": 60,
+          "end": 67
+        }
+      ],
+      "title": "",
+      "id": "45431"
+    },
+    {
+      "type": "highlight",
+      "description": "The server is configured and built using the builder pattern. It's then started by passing in our `Svm` instance, which is adapted into the required JSON-RPC handlers by the macro-generated `into_rpc()` method.",
+      "file": "svm-engine/crates/rpc/src/main.rs",
+      "highlight": [
+        {
+          "start": 69,
+          "end": 73
+        }
+      ],
+      "title": "",
+      "id": "45432"
+    },
+    {
+      "type": "highlight",
+      "description": "The `#[rpc(server)] pub trait Rpc` declares two JSON-RPC methods:\n- `getAccountInfo(pubkey: &str) -> AccountInfoResponse`\n- `sendTransaction(tx: Transaction) -> Signature`\n\nEach `#[method(name=\"…\")]` attribute maps the Rust method to its JSON-RPC name.",
+      "file": "svm-engine/crates/rpc/src/rpc.rs",
+      "highlight": [
+        {
+          "start": 50,
+          "end": 57
+        }
+      ],
+      "title": "",
+      "id": "45433"
+    },
+    {
+      "type": "textOnly",
+      "description": "The `#[rpc]` proc-macro from `jsonrpsee` expands this trait into a server trait `RpcServer` and implements an `into_rpc()` method on any type implementing it, wiring method calls to HTTP endpoints.",
+      "title": "",
+      "id": "45434"
+    },
+    {
+      "type": "highlight",
+      "description": "`pub struct Svm<'a, Storage: SVMStorage + Send + Sync> { engine: Arc<Engine<'a, Storage>> }` holds the core execution engine over the chosen storage backend.",
+      "file": "svm-engine/crates/rpc/src/rpc.rs",
+      "highlight": [
+        {
+          "start": 59,
+          "end": 61
+        }
+      ],
+      "title": "",
+      "id": "45435"
+    },
+    {
+      "type": "highlight",
+      "description": "`impl RpcServer for Svm` provides the `get_account_info` handler: it parses a base-58 pubkey, calls `self.engine.get_account()`, and returns an `AccountInfoResponse`.",
+      "file": "svm-engine/crates/rpc/src/rpc.rs",
+      "highlight": [
+        {
+          "start": 75,
+          "end": 83
+        }
+      ],
+      "title": "",
+      "id": "45436"
+    },
+    {
+      "type": "highlight",
+      "description": "`send_transaction` handler runs preflight via `sanitize_and_verify_tx`, then calls `self.engine.load_execute_and_commit_transactions(...)` to execute the transaction.",
+      "file": "svm-engine/crates/rpc/src/rpc.rs",
+      "highlight": [
+        {
+          "start": 99,
+          "end": 107
+        }
+      ],
+      "title": "",
+      "id": "45437"
+    },
+    {
+      "type": "highlight",
+      "description": "The `SVMStorage` trait defines the interface for how the `Engine` reads and writes account data.",
+      "file": "svm-engine/crates/engine/src/storage.rs",
+      "highlight": [
+        {
+          "start": 36,
+          "end": 43
+        }
+      ],
+      "title": "",
+      "id": "45438"
+    },
+    {
+      "type": "textOnly",
+      "description": "Putting it all together: `svm.into_rpc()` ties the `RpcServer` implementation on `Svm<AccountsDB>` into HTTP handlers. Clients include a `Bearer $API_KEY` header and send JSON-RPC payloads to port 8080, invoking `getAccountInfo` or `sendTransaction` over HTTP.",
+      "title": "",
+      "id": "45439"
+    }
+  ]
+}
